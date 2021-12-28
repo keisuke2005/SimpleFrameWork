@@ -1,0 +1,84 @@
+#/bin/bash
+
+function help(){
+	cat <<___HELP
+事前準備
+=httpd.conf===========================
+  <Directory "/var/www/html">
+   ～～中略～～
+   AllowOverride None
+   ～～中略～～
+  </Directory>
+
+  ↓
+
+  <Directory "/var/www/html">
+   ～～中略～～
+   AllowOverride All
+   ～～中略～～
+  </Directory>
+  編集後 systemctl restart httpd
+
+=firewalld===========================
+  httpポートの許可 80 & 443
+   firewall-cmd --permanent --add-service=http
+   firewall-cmd --permanent --add-service=https
+  変更後 firewall-cmd --reload
+
+=selinux=============================
+  /etc/sysconfig/selinux
+  SELINUX=enforcing
+  ↓
+  SELINUX=disabled
+  編集後 reboot
+
+
+コマンド:
+ /path/to/dir/starter [install dir]
+
+
+___HELP
+}
+
+if [ ${#} -ne 1 ]; then
+	help
+	exit 0
+fi
+
+_PATHTOAPPLICATION="${1}"
+
+_PATHTOFW=$(cd $(dirname $0); pwd)
+
+_SKLTN="skeleton.tar.gz"
+
+if [ ! -f ${_PATHTOFW}/${_SKLTN} ]; then
+	echo "フレームワーク本体が見つかりません。"
+	exit 1
+fi
+
+
+if [ ! -d ${_PATHTOAPPLICATION} ]; then
+	echo "インストール先のディレクトリが存在しない為、作成します。"
+	mkdir -p ${_PATHTOAPPLICATION}
+fi
+
+cd ${_PATHTOAPPLICATION}
+
+cp -p ${_PATHTOFW}/${_SKLTN} .
+
+tar -zxf ${_SKLTN}
+
+sed -i -e "s#___PATH_TO_FW#${_PATHTOFW}#" .htaccess  
+
+echo "インストール待機中"
+sleep 2
+tar ztf skeleton.tar.gz
+
+
+rm -f ${_SKLTN}
+
+echo "インストール完了"
+echo "ブラウザでアクセスしてみてください。"
+echo "http://[ホスト名]/インストールディレクトリ/welcome"
+
+exit 0
