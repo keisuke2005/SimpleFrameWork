@@ -14,6 +14,5 @@ require_once(__DIR__."/../core/MvcCore.php");
 * @copyright MezzoDay Corporation All Rights Reserved
 * @version 1.0
 * @abstract
-* @package FW\Foundation
 */
 abstract class Model extends MvcCore{}

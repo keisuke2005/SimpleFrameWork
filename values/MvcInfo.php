@@ -102,6 +102,6 @@ class MvcInfo
   */
   private function make_apl_url_path(Request $request): string
   {
-    return $request->get_context_prefix().str_replace($request->get_context_document_root(),'',getcwd());
+    return str_replace($request->get_document_root(),'',getcwd());
   }
 }

@@ -12,7 +12,6 @@ require_once(__DIR__."/../models/Model.php");
 * @copyright MezzoDay Corporation All Rights Reserved
 * @version 1.0
 * @abstract
-* @package FW\Foundation
 */
 abstract class BasicModel extends Model
 {
@@ -26,5 +25,5 @@ abstract class BasicModel extends Model
 	* @param Request $request
 	* @param Value $value
 	*/
-	abstract public function process(Value $value);
+	abstract public function process(Request $request,Value $value);
 }

@@ -39,13 +39,29 @@ class Dao {
 	*/
 	private function __construct()
 	{
-		$dsn = sprintf(
-			'%s:host=%s:%s;dbname=%s;charset=utf8mb4',
-			\Config::DB_TYPE,
-			\Config::DB_HOST,
-			\Config::DB_PORT,
-			\Config::DB_NAME
-		);
+		switch(\Config::DB_TYPE){
+			case "mysql":
+				$dsn = sprintf(
+					'%s:host=%s:%s;dbname=%s;charset=utf8mb4',
+					\Config::DB_TYPE,
+					\Config::DB_HOST,
+					\Config::DB_PORT,
+					\Config::DB_NAME
+				);
+				break;
+			case "pgsql":
+				$dsn = sprintf(
+					'%s:dbname=%s host=%s port=%s',
+					\Config::DB_TYPE,
+					\Config::DB_NAME,
+					\Config::DB_HOST,
+					\Config::DB_PORT
+				);
+				break;
+			default:
+				throw new \PDOException("対象外のDBタイプです。現在対象DB:mysql/pgsql");
+		}
+		
 		try
 		{
 			self::$pdo = new \PDO($dsn, \Config::DB_USER, \Config::DB_PW);
@@ -168,7 +184,7 @@ class Dao {
 			{
 				return array("result" => false);
 			}
-			$result =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$result =  $stmt->fetchAll(\PDO::FETCH_OBJ);
 			return array(
 				"result" => true,
 				"data" => $result[0]
@@ -203,7 +219,7 @@ class Dao {
 			{
 				return array("result" => false);
 			}
-			$result =  $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$result =  $stmt->fetchAll(\PDO::FETCH_OBJ);
 			return array(
 				"result" => true,
 				"data" => $result

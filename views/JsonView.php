@@ -4,7 +4,7 @@ namespace FW\Foundation;
 require_once(__DIR__."/../views/View.php");
 
 class JsonView extends View {
-	public function json(JsonValue $value)
+	public function json(Request $request,JsonValue $value)
 	{
 		$this->logger()->info("Start Function");
 		echo $value->getJson();

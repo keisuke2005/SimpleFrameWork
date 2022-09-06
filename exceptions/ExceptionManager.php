@@ -4,12 +4,10 @@ namespace FW\Exception;
 
 class ExceptionViewer
 {
-  public static Function output(\Throwable $e)
+  public Function output(\Throwable $e)
   {
     $arrow = "▲";
     $html = "";
-    $subMessage = isset($e->subMessage) ? $e->getSubMessage() : "致命的なエラーです。";
-
     $html .=<<<__EHEAD
 <html lang="ja">
   <head>
@@ -28,7 +26,7 @@ class ExceptionViewer
       <h1>エラーコード {$e->getCode()} {$e->getMessage()}</h1>
     </header>
     <div class="e-content">
-      <h3>{$subMessage}</h3><br>
+      <h3>{$e->getSubMessage()}</h3><br>
       <h2>スタックトレース</h2><br>
       <table>
 __EHEAD;
@@ -47,7 +45,7 @@ __EHEAD;
     </div>
   </body>
 </html>
-__EFOOT;
+    __EFOOT;
     echo $html;
   }
 }

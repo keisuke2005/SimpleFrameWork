@@ -34,7 +34,7 @@ abstract class ApiController extends Controller
 	* @throws MissingModelException
 	* @throws MissingFunctionException
 	*/
-	protected function model(Value $value): Value
+	protected function model(Request $request,Value $value): Value
 	{
 		$this->logger->info("Start Function");
 		$model = $this->get_model();
@@ -44,7 +44,7 @@ abstract class ApiController extends Controller
 		{
 			throw new MissingFunctionException("Model内にファンクションが見つかりません。(".get_class($model)."::".$fnc.")");
 		}
-		return $model->$fnc($value);
+		return $model->$fnc($request,$value);
 	}
 
 	/**
@@ -58,12 +58,12 @@ abstract class ApiController extends Controller
 	* @param Value $value
 	* @return Value
 	*/
-	protected function view(Value $value): Value
+	protected function view(Request $request,Value $value): Value
 	{
 		$this->logger->info("Start Function");
 		$view = $this->get_view();
 		$this->logger->info("End Function");
-		return $view->json($value);
+		return $view->json($request,$value);
 	}
 
 	/**
@@ -107,7 +107,6 @@ abstract class ApiController extends Controller
 	* @access protected
 	* @return View
 	* @see JsonView
-	* @package FW\Foundation
 	*/
 	protected function get_view(): View
 	{

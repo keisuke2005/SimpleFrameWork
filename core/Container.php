@@ -3,16 +3,6 @@ namespace FW\Foundation;
 
 use FW\Library\Logger;
 
-/**
-* インスタンス生成ロジックコンテナ
-*
-* コンストラクタロジック内で固有クラスに依存させないようにする為に、インスタンス生成はクロージャの中で定義する。
-* @access public
-* @author keisuke <ukei2021@gmail.com>
-* @copyright MezzoDay Corporation All Rights Reserved
-* @version 1.0
-* @package FW\Foundation
-*/
 class Container
 {
   /**
@@ -22,11 +12,6 @@ class Container
   */
   private array $container = [];
 
-  /**
-  * フレームワークデフォルトログパス
-  * @access private
-  * @var string
-  */
   const DEFAULT_LOG_PATH = "/logs/application.log";
 
   /**

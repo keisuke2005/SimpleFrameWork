@@ -128,7 +128,7 @@ class HtmlView extends View {
 	* @param Value $value
 	* @return Value
 	*/
-	public function flush(Value $value): Value
+	public function flush(Request $request,Value $value): Value
 	{
 		$this->value = $value;
 		$this->flush_html($this->mvc_info(),$this->route());

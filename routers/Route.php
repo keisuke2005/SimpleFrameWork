@@ -268,7 +268,7 @@ class Route{
 		for($i = 1;$i < count($request_url_path_array); $i++)
 		{
 			if(! $this->is_args($apl_url_path_array[$i])) continue;
-			if(isset($request_url_path_array[$i])) throw new LogicException("パスパラメータに対応するリクエストパスが存在しません。");
+			if(! isset($request_url_path_array[$i])) throw new LogicException("パスパラメータに対応するリクエストパスが存在しません。");
 			$this->path_parameters[rtrim(ltrim($apl_url_path_array[$i],'{'),'}')] = $request_url_path_array[$i];
 		}
 	}

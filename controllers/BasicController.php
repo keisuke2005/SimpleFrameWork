@@ -18,7 +18,6 @@ require_once(__DIR__."/../views/HtmlView.php");
 * @version 1.0
 * @abstract
 * @see Controller
-* @package FW\Foundation
 */
 abstract class BasicController extends Controller
 {
@@ -35,13 +34,13 @@ abstract class BasicController extends Controller
 	* @throws MissingModelException get_model内に定義
 	* @throws MissingFunctionException ファンクションが見つからない場合
 	*/
-	protected function model(Value $value): Value
+	protected function model(Request $request,Value $value): Value
 	{
 		$this->logger->info("Start Function");
 		$model = $this->get_model();
 		$fnc = is_null($this->route->get_fnc()) ? "process" : $this->route->get_fnc();
 		if(! method_exists($model,$fnc)) throw new MissingFunctionException("Model内にファンクションが見つかりません。(".get_class($model)."::".$fnc.")");
-		$_value = $model->$fnc($value);
+		$_value = $model->$fnc($request,$value);
 		$this->logger->info("End Function");
 		return $_value;
 	}
@@ -57,12 +56,12 @@ abstract class BasicController extends Controller
 	* @param Value $value
 	* @return Value
 	*/
-	protected function view(Value $value): Value
+	protected function view(Request $request,Value $value): Value
 	{
 		$this->logger->info("Start Function");
 		$view = $this->get_view();
 		$this->logger->info("End Function");
-		return $view->flush($value);
+		return $view->flush($request,$value);
 	}
 
 	/**

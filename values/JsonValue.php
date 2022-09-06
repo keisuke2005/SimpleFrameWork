@@ -20,7 +20,7 @@ class JsonValue extends Value
   * @access private
   * @var string $jsonString
   */
-  private string $jsonString;
+  private string $jsonString = "";
 
   /**
 	* jsonエンコード及び保管

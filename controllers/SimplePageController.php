@@ -18,7 +18,6 @@ require_once(__DIR__."/../views/HtmlView.php");
 * @version 1.0
 * @abstract
 * @see Controller
-* @package FW\Foundation
 */
 abstract class SimplePageController extends Controller
 {
@@ -31,7 +30,7 @@ abstract class SimplePageController extends Controller
 	* @param Value $value
 	* @return Value
 	*/
-	protected function model(Value $value): Value
+	protected function model(Request $request,Value $value): Value
 	{
 		$this->logger->info("Start Function");
 		$this->logger->info("End Function");
@@ -49,12 +48,12 @@ abstract class SimplePageController extends Controller
 	* @param Value $value
 	* @return Value
 	*/
-	protected function view(Value $value): Value
+	protected function view(Request $request,Value $value): Value
 	{
 		$this->logger->info("Start Function");
 		$view = $this->get_view();
 		$this->logger->info("End Function");
-		return $view->flush($value);
+		return $view->flush($request,$value);
 	}
 
 	/**

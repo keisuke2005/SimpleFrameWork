@@ -14,7 +14,11 @@ require_once(__DIR__."/../models/Model.php");
 * @copyright MezzoDay Corporation All Rights Reserved
 * @version 1.0
 * @abstract
-* @package FW\Foundation
+* @see HttpMethod
+* @see Get
+* @see Post
+* @see Put
+* @see Delete
 */
 abstract class ApiModel extends Model
 {

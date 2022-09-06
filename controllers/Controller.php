@@ -10,12 +10,12 @@ require_once(__DIR__."/../exceptions/MissingViewException.php");
 require_once(__DIR__."/../exceptions/MissingFunctionException.php");
 require_once(__DIR__."/../exceptions/ExceptionViewer.php");
 
+
 use FW\Exception\UserDefinedException;
 use FW\Exception\MissingModelException;
 use FW\Exception\MissingViewException;
 use FW\Exception\MissingFunctionException;
 use FW\Exception\ExceptionViewer;
-
 /**
 * Controller Class
 *
@@ -25,7 +25,6 @@ use FW\Exception\ExceptionViewer;
 * @copyright MezzoDay Corporation All Rights Reserved
 * @version 1.0
 * @abstract
-* @package FW\Foundation
 */
 abstract class Controller extends MvcCore
 {
@@ -42,8 +41,8 @@ abstract class Controller extends MvcCore
 		{
 			$this->logger->info("Start Function");
 			$value = $this->value();
-			$_value = $this->model($value);
-			$result = $this->view($_value);
+			$_value = $this->model($this->request,$value);
+			$result = $this->view($this->request,$_value);
 			$this->logger->info("End Function");
 		}
 		catch (\UserDefinedException $e)
@@ -55,7 +54,6 @@ abstract class Controller extends MvcCore
 			$this->logger->info("Catch by UserDefinedException:".$e->getMessage().":".$e->getSubMessage());
 			ExceptionViewer::output($e);
 		}
-
 		catch (\LogicException $e)
 		{
 			/*
@@ -99,11 +97,12 @@ abstract class Controller extends MvcCore
 	* Modelオブジェクトの選定及び生成は子クラスに委ねる。
 	* @abstract
 	* @access protected
+	* @param Request $request
 	* @param Value $value
 	* @throws MissingModelException Modelがない場合
 	* @throws MissingFunctionException 実行するfunction(Model内)がない場合
 	*/
-	abstract protected function model(Value $value);
+	abstract protected function model(Request $request,Value $value);
 
 	/**
 	* Viewオブジェクト処理
@@ -113,10 +112,11 @@ abstract class Controller extends MvcCore
 	* Viewオブジェクトの選定及び選定は子クラスに委ねる
 	* @abstract
 	* @access protected
+	* @param Request $request
 	* @param Value $value
 	* @throws MissingViewException
 	*/
-	abstract protected function view(Value $value);
+	abstract protected function view(Request $request,Value $value);
 
 	/**
 	* Value継承クラス名前取得
@@ -157,13 +157,14 @@ abstract class Controller extends MvcCore
 	* @return bool
 	* @throws UserDefinedException この関数はやや共通関数ぎみで上位で補足し、また違うExceptionで分岐させる為UserDefinedExceptionでthrow
 	*/
-	protected function require_file(string $filename): void
+	protected function require_file(string $filename): bool
 	{
 		$this->logger->info("Start Function");
 		if(! file_exists($filename)) throw new UserDefinedException("ファイルが存在しません。({$filename})");
 		$result = require_once($filename);
 		if($result === false) throw new UserDefinedException("ファイルの読み込みに失敗しました。({$filename})");
 		$this->logger->info("End Function");
+		return true;
 	}
 
 	/**
